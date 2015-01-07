@@ -1,0 +1,434 @@
+
+---- 0.56a --------------------------------------------------------------------
+---- 08/12/2004
+
+06-10-04, Vjaka
+- Removed DISGUISE(NAME/VERSION), renamed the current version to 0.56a.
+
+07-10-04, Vjaka
+- Removed AGREE config line neccessaty since it is not longer R* series.
+- Added startup expansion set support output depending on map*,statics*,staidx*
+  files found and loaded (T2A, LBR, AOS, SE).
+- Removed EF_New_Maps since it is integrated to source now, packet is sent when
+  needed.
+- Moving on other map now moves the same map on the server. But this currently
+  does not use caching and re-read tile information from map files every time.
+  Caching of same sectors but in different mapplanes will be in the future.
+  You should both add regions for these maps, and place corresponding files in
+  place where all other mul files resides.
+- Changed values of EXPERIMENTAL flags to remove empty slots between items.
+
+08-10-04, Vjaka
+- Fixed memory leak caused by map cache removal.
+- Fixed client screen update on map change.
+
+08-10-04, Furio
+- Added PROMPTCONSOLE, it makes the client prompt (like on page request) and send
+  the response as an argument of a user definied function.
+  (syntax PROMPTCONSOLE callback function, message to prompt)
+  
+10-10-04, Furio
+- Added RESDISP properties to account. Accepted values are 0 (PreT2a client),
+  1 (T2A), 2 (LBR), 3 (AoS), 4 (Samurai Empire). This is used to identify what type
+  of client is logged in. As default is set at 0, but if the client is T2A is
+  automatically set to 1 by Sphere. LBR, AoS and SE is not setted automatically and
+  is leaved to you.
+- Added to CHARDEF properties RESLEVEL, RESDISPDNID, RESDISPDNHUE. The first state
+  from what UO version the anim comes. The second what anim id is showed to older
+  client version. The third an hue showed to older client (if 0 or null the default
+  anim hue is used.
+- Modified scriptpack to reflect these changes for T2A monsters.
+
+22-10-04, Vjaka
+- Added <dVALUE> as a shortcut to <eval <VALUE>> to get a decimal value of a
+  single expr like a variable. Note, this affects EF_Intrinsic_Locals a bit.
+- Commands with .command and spaces before will be treated as without spaces,
+  since extra space makes privileged chars to reveal self.
+- Added TAG.PARTY_CANLOOTME for party. If 1, allows party to loot self.
+- Added @Kill trigger (SRC-killer, ARGO-killed)
+- Added sector function ALLCHARS,ALLITEMS similar to ALLCLIENTS. For regions
+  you can use SECTORS.ALLCHARS, SECTORS.ALLITEMS.
+- Changed GODPORT to accept port number as well. Old values ( <=0 = disables,
+  1=ServPort+1000) are still working also.
+- Added SYSCMD and SYSSPAWN commands to run external applications. Returns <0 if
+  there was an error. The first one blocks while program is running while the
+  second spawns and continues scripts execution. Due to obvious security fear
+  in these commands, they are disabled if OF_FileCommands is not set. Up to 9
+  command line arguments are passed to the external application.
+
+23-10-04, Furio
+- Fixed minor things in grayproto.
+- Updated grayproto (list/sizes of Uo packet in Sphere).
+- Finished and debugged the new crypt engine (for crypt clients). Currently up
+  to latest current OSI client 4.0.5a is supported.
+
+25-10-04, Vjaka
+- Fixed exception in writefile when unable to open the file.
+- Added account name output when packet dispatch generated an exception.
+
+25-10-2004. Furio
+- Still updated grayproto, with new packet infos.
+
+26-10-04, Vjaka
+- Fixed SMSG[u] resolve error.
+- Fixed <dSOMEVAL> giving some hex results.
+- Added update for items moved by NPCs when they blocks the path.
+
+27-10-04, Vjaka
+- Now Windows build tryes to use winsock 2.0 if available instead of 1.1.
+- Added amount argument to NEWITEM (newitem i_gold,45). Defaults to 1.
+- Removed one of occasions with creating an extra log not in logfile path.
+
+27-10-04, Furio
+- Fixed a bug in displaying big dialogs with newer clients (4.0.X).
+- Fixed a bug where some clients were crashing when adding an item.
+
+28-10-04, Vjaka
+- Disabled string 'q'/'Q' to be said by privileged accounts. It is due the
+  fact that default macro for repeat is Ctrl+Q, and one less Ctrl press will
+  lead to GM to reveal self existance around, which really is not good.
+  
+31-10-04, Furio
+- Some fixes related to account creation and bank/box hack.
+- Removed EF_AgeOfShadows. It'll be re-added with new features and complete
+  compatibility for older clients, when enabled.
+- Fixed another exploit with Bullettin Boards. Thx to Balkon for reporting it.
+
+01-11-04, Vjaka
+- Added .pid file existance notification to warn for double sphere launches.
+
+02-11-04, Vjaka
+- Now light level for sectors is saved as LIGHT istead of LOCALLIGHT.
+- One more cause for long default message string lookups removed.
+- EQUIPHALO now takes an argument - time to work on a person.
+- Fixed bug causing objects calculated to be in sector 0 always.
+- Added @Destroy trigger for objects.
+
+04-11-04, Vjaka
+- Quickfix of OF_Magic_PreCast - now not precasting on NPCs.
+- Consume now can take more than 65k at once.
+- Added @CreatePlayer to trigger just after the char was created by a player.
+
+05-11-04, Vjaka
+- Now "Admin" is shown instead of "GM" if person is admin or owner in title.
+
+06-11-04, Vjaka
+- Added sector function ALLCHARSIDLE similar to ALLCHARS, but looping via
+  disconnected/mounted/etc chars, not accessable by ALLCHARS.
+- Added auto map fix to zero map if it is out of bounds. Please note, that
+  this can cause some problems with MOREM usage as well.
+
+25-11-04, Furio
+- Fixed: encryption - client login.
+- Fixed: dVALUE evaluating when VALUE is already int.
+- Fixed: EQUIPHALO <timer> does not making the light disappearing.
+- Updated supported clients to 4.0.6a.
+- Removed "Cannot move here!" message.
+- Added more information to "MOVE: empty region" error. (uid and point)
+
+30-11-04, Furio
+- Fixed: MOREM automatically converted to 0 because of new multi-map feature.
+- Added MasterUid property to guildstones
+
+02-12-04, Furio
+- Fixed: Gm Page menu not sending gms on page select.
+- Fixed: Lord is displayed without space.
+- Fixed: TAGAT trying to access to non existing TAGs.
+- Modified: Only items with 08000 as attr are moved to spherestatics.scp.
+- Modified: Overskillmultiply is 0 by default now.
+- Added: ISEVENT for regions.
+
+08-12-04, Furio
+- Fixed: EvaluatingIntel on 0 int NPCs.
+- Fixed: EQUIPHALO light disappearing on Dispel.
+
+08-12-04, Vjaka
+- Fixed exploit submitting invalid amount in buy packet giving free resources
+  (thanks Breaker and Fallout for reporting this).
+- Fixed canmove to accept DIR values (0..8) in addition to a letter arguments.
+  Same changes affects other places, like move command, etc.
+- File locking method optimised. It should improve the multithreading a bit.
+- Result of the old "ACCOUNT accname" command changed to be more informational.
+- GMs should login with invul and without allshow flags set.
+- If reference set to OBJ/NEW does not exist, zero will be storied instead. And
+  opposite, if it is already deleted, OBJ/NEW value is cleared to zero.
+- Fixed exception in f_onaccount_login.
+
+08-12-2004, Various authors
+- Fixed some scripts by Vjaka.
+- Added new scripts and scripts fixes by Tattooed Corpse.
+
+---- 0.56b --------------------------------------------------------------------
+---- * not released yet
+
+09-12-04, Vjaka
+- Added map caching supporting all maps. Due to this, sectors are no longer
+  same in the same spot in different maps, allowing local settings for maps.
+- Added ADDCIRCLE=x[,y] to add a circle to a character's spellbook. If y is on,
+  includes all lower spell circles as well.
+- File locking method optimised. It should improve the multithreading a bit.
+- Changed [SECTOR x,y] in world saves to x,y,0,map to allow local settings for
+  sectors in different maps. Old format will default to map 0.
+- Since sectors are no longer shared witheen different maps, sectors on maps,
+  unsupported by server (having no corresponding .mul files) do not get ticks.
+- Fixed cause to duplicate saved items in static saves in several occasions.
+- Added BADSPAWN command to jump to the first bad spawn found in the world. You
+  should add this to some of the [PLEVEL records. It also saves the UID into
+  ACT in case you unable to see it due to some obstacles.
+- Removed useless PRIVHIDE (privshow 0/1 is enough for this).
+
+10-12-04, Vjaka
+- Fixed some defmessages misprint making unable to override them.
+- Fixed @Kill to trigger even if the killer is not an agressor in the fight.
+- Changed MAPPLANE->MAP, LOCALLIGHT->LIGHT (.56a supported both variants, but
+  saved the second). Launch and save in .56a will autoconvert this in saves.
+- Now any items with ATTR_STATIC are saved to spherestatics.scp, not only those
+  who has this flag being the only set.
+- Fixed carriage return in accounts unused message.
+  
+11-12-04, Furio
+- Fixed: bugs with FORCONT* loops.
+- Fixed: bug with coloured text in comm crystal.
+- Added: SKILLGAIN function to call internal sphere skillgain function. Args are
+  skill to gain and difficulty (0 to 100).
+- Added: REPORTEDCLIVER property for clients. It'll contain the version that
+  the client is. (this is easy fakeable by 3rd party programs, but still is
+  useful)
+
+13-12-04, Vjaka
+- Fixed resolving functions executing on containers, if the name started from
+  rescount,restest,fcount or count.
+- Fixed isneartype not working if calling under points (like from TARGP).
+
+17-12-04, Vjaka
+- Account delete information now contains account name.
+- Added NPC keyword GOTO x,y,z,map to execute sphere default movements there.
+- Redone pathfinding to support separate thread execution, so it now utilizes
+  extra thread if OF_Multithreaded is set.
+- Advanced AI now includes food search on hunger to eat and gather meal around.
+  It is executed in separate thread with pathfinding if configured so.
+
+21-12-04, Vjaka
+- Changed sector allocations, now allocates only those who are needed by the
+  server depending on the *.mul files found. Thus, on bare t2a install no space
+  for other maps will be allocated (saves several Mbytes).
+- Random selection {x y} now supports format {x,y} also. Should help using it
+  with DAM/AR fields of items.
+- Added EXP field to characters. No internal support for it yet. But you can
+  use it in scripts already.
+- Empty accounts file is created on-fly if not found. Useful for unpack-n-run.
+- Fixed bug with TOTALCONNECTTIME being increased by doubled value, and now is
+  made more accurate.
+- Optimized the UID allocation routine, trying to disallow creating holes in
+  objects allocation. This should improve memory neccessaty increase for large
+  or long-lasting servers. Howewer, this does not defrag the current save, only
+  newly generated UIDs will be optimized - no existant UIDs will be altered.
+  Garbage Collection should be enabled for this optimization to work.
+- Expanded account information in ACCOUNT NAME command by logged char name.
+
+03-01-05, Vjaka
+- Added <Rarguments> as a shortcut to <eval rand(arguments)>. Can take either
+  one, two or no arguments like <R>, <R15>, <R3,15>. If no arguments given,
+  R1000 is assumed.
+- You can now disable broadcast messages (like errors, connects, etc) from the
+  server log to be sent to your account logged via telnet. You can toggle this
+  behavior per account via PRIV field of the account (mask 0400). So, only
+  responces to your commands and some very-basic messages (like world save)
+  will be sent in this case.
+
+08-01-05, Vjaka
+- Added support for virtual maps. Now map numbers 0..255 are supported by the
+  server.
+- Map dimensions are now customizable in INI-file using by the following cmd:
+  MAPx=max_x,max_y,sector_size,real_map_number.
+  Here x - the map number for ingame useage (4rd coordinate of the coordinate).
+  max_x - maximal X coordinate of the map (should be multiply of 8).
+  max_y - maximal Y coordinate of the map (should be multiply of 8).
+  sector_size - the sector size (you can play with this if you experience lags
+    decreasing this value (should be multiply of 8 and both max_x and max_y).
+  real_map_numer - number used by map files (like: 0 for map0, statics0).
+  You can also change some attribute of the current map not redefining all
+  values, skipping the ones you wish to be as default putting 0 instead (for
+  real map number -1). For example, decreasing sector size for map 0 to 16
+  from default value of 64 will look in INI file thus: "MAP0=0,0,16,-1".
+  Please note, that no changes are applied when server is already started.
+- Default map numbering has been changed (you can ovverride it easily by MAPx
+  setting in sphere.ini). Now 0 = map0, 1 = map0, 2 = map2, 3 = map3, 4 = map4.
+
+10-01-05, Furio
+- Added: tooltip %d command for gumps (works in SE clients).
+- Added: sphere_map*.scp/sphere_map_points*.scp for new maps and fixed the
+  default one.
+- Updated: gray proto with new packets.
+- Updated: client support to 4.0.7 family.
+- Updated: fix in default script pack.
+
+13-01-05, Furio
+- Modified SERV.MAP(x,y) to accept a 3rd parameter, the map. If omitted is
+  defaulted to 0.
+- Added SECTOR access to read-only properties from a point. Example:
+  SERV.MAP(100,100,1).SECTOR.ITEMCOUNT will give you the itemcount of the
+  sector that contains the point 100,100 on map 1.
+- Added REGION access to read-only properties from a point. (works like
+  SECTOR one)
+- Fixed: gumppic to show hue when used. (Hue usable only for client >= 3)
+
+15-01-05, Vjaka
+- Changed the way the server saves allowing more information about the cause of
+  some exception (which is now not fatal for the save).
+
+17-01-05, Vjaka
+- Added LEVEL field to char as the future part of the experience system.
+- Added ExperienceSystem, ExperienceMode, LevelSystem, LevelMode, LevelNextAt
+  fields to the .INI file as a future part of the experience system. Read the
+  default sphere.ini for more description over these fields.
+- PRIV flags are now auto-clearing bits corresponding to not used priv. This is
+  a solution for a possible incompatibility when the previosely disabled bit
+  will be reused with other functionality on same world saves.
+- Fixed: LAYER_EXTRA is now used ONLY to place the items bought by the vendor.
+- Items sold to vendors are auto-deleted exactly upon the sell operation. The
+  only case they are saved, if they are sold to player vendors.
+- Amount of items in sell packet is now limited to the container size.
+- Fixed one more sell/buy exploit.
+
+17-01-05, Furio
+- Fixed: party system.
+- Fixed: group disappeared from gumps.
+- Added: scriptable components for the party. Still work in progress.
+  With <REF>.PARTY refer to the current party of the char.
+  	   <REF>.PARTY.MEMBER.x refer to any member of the party.
+       <REF>.PARTY.MASTER refer to the master of the party.
+  PARTY.MEMBERS give the count of members
+  PARTY.MEMBER.x has also ISMASTER and ISLOOTABLE properties.
+  PARTY.ADDMEMBER[FORCED] you can add a meber by script (forced  version works
+       without the normal /accept behaviour)
+  PARTY.DISBAND disband the current party
+  PARTY.REMOVEMEMBER @<N> remove the Nth member
+  PARTY.REMOVEMEMBER <UID> remove a member in the party with the UID given
+       (if is the master the party is disbanded)
+  PARTY.SYSMESSAGE @<N> TEXT send a party sysmessage to the Nth member
+  PARTY.SYSMESSAGE <UID> TEXT send a party sysmessage to a member in the party
+       with the UID given
+  PARTY.SYSMESSAGE TEXT send a sysmessage to the party
+  PARTY.MESSAGE @<M> TEXT send a message from the Mth member to the party
+  PARTY.MESSAGE @<M>,<N> TEXT send a message from the Mth member to the Nth
+       member
+  PARTY.MESSAGE <UID1> TEXT send a message from the <UID1> to the party
+  PARTY.MESSAGE <UID1>,<UID2> TEXT send a message from <UID1> member to <UID2>
+- Added: TAG/TAG0 for party.
+
+24-01-05, Vjaka
+- Fixed bug with some keywords recognition caused by <Rxxx> operator.
+- Chardef triggers do not apply to players now.
+- Write deleted accounts out to log file
+
+25-01-05, Vjaka
+- Fixed vendor selling in case of one item being sold.
+- Ensure double character removal from view in "remove 1" case (for allshow).
+
+26-01-05, Vjaka
+- Fixed registry settings overriding MULFILES setting in some cases in win32.
+- Fixed the way spells are checked whatever they are in a spellbook. New type
+  of spellbook (186) has been added for script purposes with internal support.
+  Now the spellbooks (if not default one) can be configured to specify which
+  number of the lowest spell it contains (stored in MOREZ).
+- Fixed casting speel with two or more similar spell books when it does not
+  exist in one of these books.
+- Removed limitation to 1 byte (255) for MOREZ of spellbooks. Now it can hold
+  2 bytes (65535). Please note, that satting MOREZ via MOREP is incorrect here.
+
+28-01-05, Vjaka
+- Fixed bug caused with layer_extra removal from buy menu in older clients.
+- Added support for packets filterings. Please note, that you should understand
+  what are you doing. You can install your handler of a packet X specifying
+  PACKETx=functionname. This function will be called when the packet is going
+  to be processed by the server. It has the following arguments set:
+  ARGN1 = packet number (to allow using one function for different packets)
+  ARGS = source client ip address
+  LOCAL.0-LOCAL.9 - first 10 bytes of the packet for parsing contents
+  If you do return 1 in this function, the packet will NOT be processed.
+- Some exceptions debug messaging speed optimised.
+
+29-01-05, Vjaka
+- Added argument for RECRUIT on guildstone. If set 1, the member recruited will
+  become a fully qualifyed member of a guild with abbriviation shown on.
+
+30-01-05, Furio
+- Fixed: compatibility problems on Linux.
+- Freeze for 0.56b Test1.
+
+03-02-05, Vjaka
+- Argument switches of target[f][g][w] functions can be given in any order.
+- Fixed removing events on other events execution that leaded skipping others.
+- Memory usage is lowered (pre-storage optimized for more accurate values),
+  approx 30-40% less memory will be used (depending on load structure).
+
+04-02-05, Vjaka
+- Logout now quits from chat removing problems with inactive zombies left.
+- Characters with Statf_STONE cannot logout (actualy, have 1 hour logout timer).
+- You can now access account properties using SERV.ACCOUNT.x. reference where x
+  is the numerical index of the account (0..SERV.ACCOUNTS) [read-only]
+- Fixed extra step made on sector borders.
+- Fixed "return"/"return 2" in chardef triggers stopping others from launching.
+
+04-02-05, Furio
+- Added support for 4.0.8 clients.
+- Fixed some arguments parsing in party functions
+
+05-02-05, Vjaka
+- Optimized time profiling on ticking objects.
+
+07-02-05, Vjaka
+- Problem with items left with switching virtual maps with one physical should
+  be solved.
+- Added simple mySQL support. New settings MySqlHost, MySqlUser, MySqlPassword,
+  MySqlDatabase will be used to connect to the DB in case if MYSQL is set to 1.
+  You will need extra .dll/.so to download for sphere installation. They will
+  join the packages.
+
+08-02-05, Vjaka
+- Fixed several map support bugs with incorrect sector counting (should improve
+  support of a high map numbers).
+
+11-02-05, Vjaka
+- Fixed bug causing incorrect function name lookup in several cases with some
+  special chars like underline (_).
+- Added debug flags 0200 and 0400 to debug experience and level changes from
+  server console (if enabled).
+- Experience system integrated. Few addons about defaults to config comments:
+  a) experience bonus for crafting counted as a value/100.
+  b) default experience set on create is str+dex/2+int.
+  c) manual setting experience will alter level if configured so.
+  d) dying decreases experience by 10%
+  e) killing enemy will give experience depending on exp and level of target.
+
+12-02-05, Vjaka
+- Added 2 more EXP settings to config: ExperienceKoefPVP and ExperienceKoefPVM,
+  controlling percents of gaining experience in PvP and PvM combat.
+- Added triggers @ExpChange and @ExpLevelChange, where ARGN1 (writeable) is the
+  change is going to happen. Returning 1 cancels the change.
+
+12-02-05, Furio
+- Fixed: another buffer overrun exploit in log system. Thx to Radiant for
+  reporting it.
+- Added: SUPPRESSCAPITALS (default 0) to enable/disable Vjaka system to avoid
+  long text written only in capital letters.
+
+14-02-05, Vjaka
+- OF_Advanced_AI is now obsolete. Currently it is controlled by NPCAI setting
+  in config file.
+- Added MaxLoopTimes value to config (default 10000) to limit a number of
+  iterations the while/for cycle could have to remove possible deadlocks making
+  server to stop responding (better use this instead of main loop restart).
+- Added MOVERATE to CHARDEFs. It is the percent modifyer of the speed of the
+  NPC - the higher it is, the slower will the NPC be. Default is 100.
+- Now double clicking on the log window in windows build will bring up an
+  editor with corresponded file (if any specifyed in the same line) opened.
+
+15-02-05, Vjaka
+- Fixed one more buy menu exploit (probably, the last one) ;).
+- Fixed NEWITEM id,amount in case if non-exact value was given (like {x y}).
+- Added cont argument to NEWITEM (now it looks NEWITEM id,amount,container).
+
+16-02-05, Furio
+- Fixed: compatibility things for Linux/BSD build.

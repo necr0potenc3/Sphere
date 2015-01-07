@@ -1,0 +1,80 @@
+[== Exploits/Bugfixes ==]
+- One item/pile sell time should be limited to 0.3 sec (disables autobuy/autosell, inject)
+- Close up all possible ways getting zero-or-negative stats
+- @Destroy seems not executed http://www.sphereserver.net/forums/index.php?showtopic=32982&hl=
+- Criminal bug - you hit other's npc (like by magic arrow), it hits you, and the owner of the pet
+  is now a criminal.
+- Deny throwing items by Z coord (height). They should go to the some surface. Thus, ground and air disabled.
+- Bug with placing unlimited same-type items to the bank (if targeted stacking the similar object).
+- Date calculation incorrect (like in connectdate in accounts unused)
+  http://www.sphereserver.net/forums/index.php?showtopic=33678&hl=
+- Try does not work with locals
+- OF_Items_AutoName causes explosion potion (exploded/crafted?) named to <SERV.SPELL.<>.NAME>
+- Some script errors in loops cause server to hang, like "LOCAL.N -= LOCAL.M>"
+
+[== CRs (Change Requests) ==]
+- RESDISP:
+  Combining ResDisp + Ef_Aos for feature packet sending
+  Other things (new packet parsing, status sending)
+  Add to STATS new AoS things (Ice,Poison,Fire,Light,Luck ecc)
+- Mapdiffs support (see bottom of the cGrayMap.cpp)
+
+[== New Features ==]
+- Add @PartyJoin, @PartyLeave and @PartyInvite.
+- newequip (creates a new item, equips it), newloot (creates a new item or loot template, sticks it on a corpse in @death events), 
+- equipprops (example equipprops 10.0 magery, 10 dex - would give 10.0 magery and 10 dex on equip, remove it on unequip, placed in @Create on an item)
+  ( k: doable by adding a simple resourcegroup field to items/itemdefs )
+- damtype for itemdef base = 0002 | 0010 // physical & fire
+- ON=@CharDCLICK
+- ON=@Karma, ON=@Fame
+- useful 99/1.0 features (my comment in brackets - Vjaka):
+  Script error will jump out of current block. (should simulate endif)
+  Allow NPC to summon pets.
+  loot from blue says you need to steal ?
+  floating point support for scripts.
+  multithread protect atoms and dont create atom to search for tag
+  LinkFile and LinkLine as props of triggered items
+  multi cliloc 0 (what's fuckin this?)
+  region_flag_underground should be replaced by region_flag_roof in map.scp files where appropriate.
+  Read resource level from client logging in. detect AOS
+  ODBC access to reading accounts (actualy ODBC suxxs, but just as a sample)
+  MENU, DIALOG, the same (menu=dialog).
+  Track FRIEND memories of my pets.
+  TAG.CORPSEID for CHARDEF to change the corpse.
+  DESIRES= for setting ally groups with NPC's (just review if this is really needed and usable)
+  MaxCharsPerAccount should work (support of 6+ chars?).
+  MapDif files supported
+  Papua house ladders work.
+  no animation of player corpses.
+  drop on vendor to trade quick
+  Jailed evil not killed by guards.
+- ZIP archiving/dearchiving methods for worldsaves autoarchiving on save and dearchiving on load
+- @sawcrime called right after someone commits a crime and right before the npc see's the crime
+- @NpcAction called when npc is selecting a skill to start
+- @UserGuildButton for new clients (they no longer have chat button)
+- Allow putting dialog commands from the functions called from dialogs
+- <?notag .....?> means that all text between <?notag -and- ?> will be plain text with any chars inside (not parsed)
+- MySQL:
+  make accounts connecting/disconnecting to the DB, saving and loading to/from it
+  maybe maintain persistent link? to allow one connection for large amount of time withour reconnects
+  add ability to execute sql queries from scripts (maybe also get the result)
+
+[== Algourythm Ideas ==]
+- New script system with scripts precompiled on loading and only the binary execution will take place
+  it will cause some language changes.
+- Resources optimisation
+  dual sell list: like one like currently the container, and the other - dynamically generated upon
+    SELL/BUY settings of a char. this will elimenate neccessaty to have tons of items by each vendor in world,
+    heavily decreasing lags.
+    the only problem is the amount of resources the vendor can maintain, but i think that the list could be
+    generated upon SELL dialog request and then the whole stock of itesm not having special VALUE set on them
+    removed on timer so, autorestock will be done.
+    in this way the amount-to-stock in SELL/BUY lists will work like should
+  resources extraction: 6144x4096 - 25mb if struct is 1 byte in size, if 2 bytes - resourceid, 2 amount left,
+    much but quick and no items uids/items, nothing. btw, it could be 4 bytes, 2 resourceid, 1 amount, 1
+    reserved with 2 bits meaning resource type - log/ore/fish. if we will limit 1 resource spawn per step, than
+    it will be 100mb for no items lags. not bad actualy ;), worth to try, problem will be making resourceid to
+    fit 2 bytes ;). But, if having multimaps/mapplanes, than we will have 256*100mb ;)
+    so, we can add this to sphere config. making this to work on multiply planes at once, like wish optimisation
+    use that. if wish mapplanes (rare people uses that) - use default
+- Redo system of saving/loading to support 3 formats : text/binary/sql

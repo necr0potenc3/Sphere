@@ -1,0 +1,23 @@
+Here is the list of known issues in the current Sphere Evolution project.
+Some of them are subject of change in future versions, some will stay just in
+knowledge base ;) forever.
+So, please, do not report them as bugs.
+
+- (Unix) Threading makes spheresvr unstable.
+- (All)  Resync bug - object definitions not removed while resynching the file
+         leading to errors when moved from script or removed totaly.
+- (All)  Dialogs (at least main definition) are not a script actualy, so LOCALs
+         and some other stuff not always work there in some combinations (try).
+- (All)  Evaluating of IF ( something ) firstly counts each valud inside, not
+         making any optimisations. So, IF you do if (( 5 > 2 ) || ( 3 < 1 )),
+		 both expressions will be evaluated, transformed to IF ( 1 || 0 ) and
+		 only then parsed. Same affected by QVAL, and any other commands.
+- (All)  Switching AOS features on denies old T2A/LBR clients to connect.
+- (All)  TRIGGER=@trigger does not work in EVENTS.
+- (Unix) SYSCMD and SYSSPAWN commands not working.
+- (All)  Setting variable even in brackets with mathematical characters inside,
+         like "*<eval <LOCAL.CARD_C>>*" will lead to try evaluating the string
+		 expression. http://sphereserver.net/forums/index.php?showtopic=33331
+- (All)  there is not possilbe (in some cases) to block all ways to execute a
+         command by a privileged account (from the view of admin).
+		 http://www.sphereserver.net/forums/index.php?showtopic=33668
